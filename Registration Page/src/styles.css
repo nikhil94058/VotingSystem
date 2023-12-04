@@ -1,0 +1,80 @@
+*{
+  padding:7px;
+}
+body{
+  background: radial-gradient(58.45% 48.48% at 50% 50%, rgba(91, 127, 255, 0.20) 0%, rgba(91, 127, 255, 0.20) 0.01%, rgba(0, 0, 0, 0.20) 100%), #1F1F23;
+}
+
+.header{
+  display:flex;
+}
+
+h1{
+  margin-top:16px;
+  margin-left:220px;
+  font-family:Rubik;
+  font-weight:400px;
+  font-size:55px;
+  color:white;
+}
+.logo{
+  width: 42px;
+  height: 38px;
+}
+h5{
+  color: #2BBA07;
+  font-family: Poppins;
+  font-size: 20px;
+  font-weight: 600;
+  margin-top:10px;
+}
+.main{
+  display:flex;
+  flex-direction:column;
+  position:relative;
+}
+.form{
+  display:inline-block;
+}
+
+input{
+  display:inline;
+  font-size:23px;
+  font-family:Poppins;
+  margin:40px;
+  width: 400px;
+  height: 65px;
+  flex-shrink:0;
+  border-radius: 25px;
+  background: #DADADA;
+}
+
+button{
+  font-size:18px;
+  font-family:Poppins;
+  color: #FFFBFB;
+  width: 250px;
+  height: 50px;
+  flex-shrink: 0;
+  margin-left:250px;
+  margin-top:65px;
+  border-color:rgba(158, 59, 249, 0.80);
+  border-radius:25px;
+  background:linear-gradient(270deg, rgba(158, 59, 249, 0.80) 21.43%, rgba(13, 93, 219, 0.83) 90.92%);
+
+}
+
+.image{
+  box-shadow: 0px 4px 50px 0px #AD00FF;
+  background: rgba(45, 2, 85, 0.9) -54.542px 0px / 107.905% 100% no-repeat;
+  width: 600px;
+  height: 460px;
+  flex-shrink: 0;
+  border-style:none;
+  border-radius:50px;
+  align-self:flex-end;
+  position: absolute;
+  top:30px;
+  right:0;
+}
+
