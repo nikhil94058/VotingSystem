@@ -23,8 +23,9 @@ const Work = () => {
       <div className="work-section-top">
         <h1 className="primary-heading">Features</h1>
         <p className="primary-text">
-          Lorem ipsum dolor sit amet consectetur. Non tincidunt magna non et
-          elit. Dolor turpis molestie dui magnis facilisis at fringilla quam.
+          
+
+A blockchain e-voting system ensures  security, transparency and  tamper-resistant elections by utilizing decentralized ledger technology. 
         </p>
       </div>
       <div className="work-section-bottom">
