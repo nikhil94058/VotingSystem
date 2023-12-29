@@ -57,19 +57,21 @@ contract Election {
 
     //Modifier check for Voter
     modifier onlyOneVoter(address _numberid) {
-    require(_numberid != admin, "Admin and Voter have the same Address");
-    uint count = 1;
-    if (voters.length >= 1) {
-        for (uint i = 0; i < voters.length; i++) {
-            if (voters[i].number_id == _numberid) {
-                count = count + 1;
+        require(_numberid != admin, "Admin and Voter have the same Address");
+        uint count = 1;
+        if (voters.length >= 1) {
+            for (uint i = 0; i < voters.length; i++) {
+                if (voters[i].number_id == _numberid) {
+                    count = count + 1;
+                }
             }
         }
+        require(count <= 1 && voters.length <= 1, "Invalid Doubled Registration");
+        _;
     }
-    require(count <= 1 && voters.length <= 1, "Invalid Doubled Registration");
-    _;
-}
 
+    // Event to signal the registration of a new candidate
+    event CandidateRegistered(uint indexed candidateId, string name, address numvotes);
     // By Deepak
     function registerCandidate(string memory _name, address _numberid) public owner onlyones(_numberid) {
     Candidate memory newCandidate = Candidate({party: _name, numberid: _numberid, voteCount: 0});
@@ -82,6 +84,8 @@ contract Election {
 
 
     // By Satyam
+    // Event to signal the registration of a new voter
+    event VoterRegistered(string name, address number_id);
     // Voter Registration
     function registerVoter(string memory _name, address _number_id) public owner onlyOneVoter(_number_id){
         Voter memory newVoter = Voter(_name, _number_id, true, msg.sender);
@@ -90,14 +94,6 @@ contract Election {
         // Emit event for voter registration
         emit VoterRegistered(_name, _number_id);
     }
-
-    // Event to signal the registration of a new voter
-    event VoterRegistered(string name, address number_id);
-
-    // Event to signal the registration of a new candidate
-    event CandidateRegistered(uint indexed candidateId, string name, address numvotes);
-
-
 
     // Voting
     //Shivani Parasar

@@ -1,7 +1,8 @@
 
 import React, { useEffect, useState } from 'react';
 import abi from "./integration/abi/Election.json";
-// import RegisterCandidate from './integration/RegisterCandidate.js';
+import RegisterVoter from './integration/RegisterVoter.js';
+import RegisterCandidate from './integration/RegisterCandidate.js';
 import Vote from './integration/Vote.js';
 const ethers = require('ethers');
 
@@ -14,7 +15,7 @@ function App() {
   const [account, setAccount] = useState("None");
   useEffect(() => {
     async function WalletConnection() {
-      const contractAddress = "0xA968B1898BD4f3bBCb414FcF353d0807d5DB23E6";
+      const contractAddress = "0xC42F04315C41f48E6bEa0941381E4f423799Fc45";
       const contractABI = abi.abi;
       try {
           const {ethereum} = window;
@@ -50,7 +51,9 @@ function App() {
       <div className="App">
           <p>Connected Account: {account}</p>
           <h1>Registration for Candidate</h1>
-          {/* <RegisterCandidate state = {state}/> */}
+          <RegisterCandidate state = {state}/>
+          <h1>Registration for Voter</h1>
+          <RegisterVoter state = {state}/> 
           <h1>Vote</h1>
           <Vote state = {state}/>
       </div>
