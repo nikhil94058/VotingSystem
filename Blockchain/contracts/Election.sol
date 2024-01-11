@@ -1,6 +1,5 @@
 // SPDX-License-Identifier: UNLICENSED
-pragma solidity ^0.8.0;
-
+pragma solidity >= 0.8.0;
 contract Election {
 
     // Voters Information
@@ -41,7 +40,7 @@ contract Election {
     }
 
     // Modifier is checking for candidates register ones only for the same address
-    modifier onlyones(address _numberid) {
+    modifier onlyOneCandidate(address _numberid) {
         require(_numberid != admin, "Admin and Candidate have the same Address");
         uint count = 1;
         if (candidates.length >= 1) {
@@ -51,7 +50,7 @@ contract Election {
                 }
             }
         }
-        require(count <= 1 && candidates.length <= 1, "Invalid Doubled Registration");
+        require(count <= 1, "Invalid Doubled Registration");
         _;
     }
 
@@ -59,45 +58,49 @@ contract Election {
     modifier onlyOneVoter(address _numberid) {
         require(_numberid != admin, "Admin and Voter have the same Address");
         uint count = 1;
+        uint i = 0;
         if (voters.length >= 1) {
-            for (uint i = 0; i < voters.length; i++) {
+            for (i = 0; i < voters.length; i++) {
                 if (voters[i].number_id == _numberid) {
-                    count = count + 1;
+                    count++;
                 }
             }
         }
-        require(count <= 1 && voters.length <= 1, "Invalid Doubled Registration");
+        require(count <= 1 , "Invalid Doubled Registration");
         _;
     }
 
     // Event to signal the registration of a new candidate
-    event CandidateRegistered(uint indexed candidateId, string name, address numvotes);
     // By Deepak
-    function registerCandidate(string memory _name, address _numberid) public owner onlyones(_numberid) {
+    function registerCandidate(string memory _name, address _numberid) public owner onlyOneCandidate(_numberid) {
     Candidate memory newCandidate = Candidate({party: _name, numberid: _numberid, voteCount: 0});
     candidates.push(newCandidate);
 
     // Emit event for candidate registration
-    emit CandidateRegistered(candidates.length - 1, _name, _numberid);
+    }
+
+    function viewCandidate() public owner view returns (Candidate[] memory) {
+        return candidates;
+    }
+
+    function viewVoter() public owner view returns (Voter[] memory) {
+        return voters;
     }
 
 
 
-    // By Satyam
     // Event to signal the registration of a new voter
-    event VoterRegistered(string name, address number_id);
     // Voter Registration
     function registerVoter(string memory _name, address _number_id) public owner onlyOneVoter(_number_id){
-        Voter memory newVoter = Voter(_name, _number_id, true, msg.sender);
+        Voter memory newVoter = Voter(_name, _number_id, false, msg.sender);
         voters.push(newVoter);
 
         // Emit event for voter registration
-        emit VoterRegistered(_name, _number_id);
     }
 
     // Voting
-    //Shivani Parasar
-    function vote(address _candidateAddress, address _voterAddress) public onlyOneVoter(_voterAddress){
+    function vote(address _candidateAddress, address _voterAddress) public{
+        
     uint voterIndex;
     for (uint i = 0; i < voters.length; i++) {
         if (voters[i].number_id == _voterAddress) {
@@ -128,28 +131,28 @@ contract Election {
     require(candidateFound, "Invalid candidate.");
     }
 
-    //Akshay Pandey
-    function getVotes(address _candidateAddress) public view returns (uint) {
-    bool candidateFound = false;
-    uint candidateIndex;
+    
+    function getVotes(address _candidateAddress) public owner view returns (uint) {
+    // bool candidateFound = false;
+    uint i;
 
-    for (uint i = 0; i < candidates.length; i++) {
+    for ( i = 0; i < candidates.length; i++) {
         if (candidates[i].numberid == _candidateAddress) {
-            candidateFound = true;
-            candidateIndex = i;
+            // candidateFound = true;
             break;
         }
     }
 
-    require(candidateFound, "Invalid candidate.");
-    return candidates[candidateIndex].voteCount;
+
+    require(i < candidates.length, "Invalid candidate.");
+    return candidates[i].voteCount;
     }  
 
 
 
-    // By Shreya Jha
+    
     // Getting the winner of the election
-    function getYourWinner() public view returns (string memory) {
+    function getYourWinner() public owner view returns (string memory) {
         string memory winnerId = "";
         uint maxVotes = 0;
         for (uint i = 0; i < candidates.length; i++) {
@@ -164,23 +167,18 @@ contract Election {
 
 
     // Function to calculate the percentage of votes for a candidate
-    function getPercentageForCandidate(string memory party) public view returns (uint256) {
-        require(bytes(party).length > 0, "Candidate name cannot be empty");
-
+    function getPercentageForCandidate(string memory party) public owner view returns (uint256) {
+        uint count = 0;
         uint i;
         for (i = 0; i < candidates.length; i++) {
             if (keccak256(abi.encodePacked(candidates[i].party)) == keccak256(abi.encodePacked(party))) {
-                break;
+                count++;
             }
         }
-        require(i < candidates.length, "Invalid candidate.");
-
-        // Check if the candidate has received any votes
-        if (candidates[i].voteCount == 0) {
-            return 0;  // Return 0 if the candidate has received no votes
-        }
+        
 
         // Calculate the percentage using the formula
-        return (candidates[i].voteCount * 100) / totalVotes;
+        require(totalVotes != 0, "Voting is not started");
+        return (count * 100) / totalVotes;
     }
 }

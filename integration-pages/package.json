@@ -36,6 +36,6 @@
     ]
   },
   "devDependencies": {
-    "ethers": "5.7"
+    "ethers": "^5.7.0"
   }
 }

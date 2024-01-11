@@ -4,6 +4,9 @@ import abi from "./integration/abi/Election.json";
 import RegisterVoter from './integration/RegisterVoter.js';
 import RegisterCandidate from './integration/RegisterCandidate.js';
 import Vote from './integration/Vote.js';
+import {GetVotes}  from './integration/GetVotes.js';
+import { GetYourWinner } from './integration/GetYourWinner.js';
+import { GetPercentageForCandidate } from './integration/GetPercentageForCandidate.js';
 const ethers = require('ethers');
 
 function App() {
@@ -15,7 +18,7 @@ function App() {
   const [account, setAccount] = useState("None");
   useEffect(() => {
     async function WalletConnection() {
-      const contractAddress = "0xC42F04315C41f48E6bEa0941381E4f423799Fc45";
+      const contractAddress = "0xbE73Cb4667247C9c4BdeA1e8C70F32E6c6E0413B";
       const contractABI = abi.abi;
       try {
           const {ethereum} = window;
@@ -56,6 +59,12 @@ function App() {
           <RegisterVoter state = {state}/> 
           <h1>Vote</h1>
           <Vote state = {state}/>
+          <h1>Get Vote Count</h1>
+          <GetVotes state = {state}/>
+          <h1>Get Your Winner</h1>
+          <GetYourWinner state = {state}/>
+          <h1>Get Percentage of Candidate</h1>
+          <GetPercentageForCandidate state = {state}/>
       </div>
   );
 }
